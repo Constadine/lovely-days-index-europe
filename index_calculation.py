@@ -19,7 +19,7 @@ class Grade:
         for key, value in self.apparent_temp_grading.items():
             # print(f"AT:{apparent_temperature},key:{key},value:{value}")
             low, high = value
-            print(apparent_temperature)
+            # print(apparent_temperature)
             if (low <= apparent_temperature <= high):
                 return key
         else:
@@ -50,7 +50,6 @@ class Grade:
             return 1
 
 def calculate_holiday_index_simple(temp):
-    print(temp)
     holiday_index = 0
     if (temp > 25) & (temp < 31):
         holiday_index = 1
@@ -63,19 +62,18 @@ def calculate_comfort_index_summer(tasmax, tas, rel_hum, sfc_wind):
     # HI = mpcalc.heat_index(tas*units.degC, humidity*units.percent)
     
     DAT = mpcalc.apparent_temperature(tasmax * units.degC, rel_hum*units.percent, sfc_wind*units('m/s'),
-                                     mask_undefined=False).magnitude
+                                      mask_undefined=False).magnitude
     
     # MAT = mpcalc.apparent_temperature(tas * units.degC, rel_hum*units.percent, sfc_wind*units('m/s'),
     #                                  mask_undefined=False).magnitude
 
     DAT_grade = grader.grade_apparent_temp(DAT)
     MAT_grade = grader.grade_apparent_temp(tas+5)
-    # print(tas)
     MT_grade = grader.grade_max_temp(tasmax)
     RH_grade = grader.grade_relative_humidity(rel_hum)
     WS_grade = grader.grade_wind_speed(sfc_wind)
-    # print(DAT_grade, MAT_grade, MT_grade, RH_grade, WS_grade)
     comfort_index = 2*((4 * DAT_grade) + (MAT_grade) + (2*MT_grade) + (2*RH_grade) + WS_grade)
     
     return comfort_index
 
+    
