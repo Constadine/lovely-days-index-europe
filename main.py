@@ -55,50 +55,48 @@ I need to keep the coordinates so I can plot afterwards as well.
 """
 
 # ds_comfort_index = xr.Dataset(coords=ds_relhum.coords, attrs=ds_relhum.attrs)
-# This is roughly how I imagined it but feel free to bully me. I don't care if you manage to salvage my soul.
+
+
 # index_points_ds['comfort_index'] = index_points_ds.assign({"comfort_index": lambda row: [calculate_comfort_index_summer(tasmax[row], tas[row], rel_hum[row], sfc_wind[row]])})
 # pleasant_index_values = calculate_comfort_index_summer(tasmax, tas, rel_hum, sfc_wind)
 
 
-# ------------------------------------- Daddy approach
+# ------------------------------------- Dad approach
 
-# dims = ds_tasmax.tasmax.dims
-# coords = {dim: ds_tasmax[dim] for dim in dims}
-# attrs = ds_tasmax.attrs
+dims = ds_tasmax.tasmax.dims
+coords = {dim: ds_tasmax[dim] for dim in dims}
+attrs = ds_tasmax.attrs
 
-# # Create the new empty Dataset
-# ds_comfort_index = xr.Dataset(coords=coords, attrs=attrs)
+ds_comfort_index = xr.Dataset(coords=coords, attrs=attrs)
 
-# # Add a new variable for the comfort index with the same dimensions and coordinates
-# ds_comfort_index['comfort_index'] = xr.DataArray(np.zeros(ds_tasmax.tasmax.shape), dims=dims, coords=coords)
+# Add a new variable for the comfort index with the same dimensions and coordinates
+ds_comfort_index['comfort_index'] = xr.DataArray(np.zeros(ds_tasmax.tasmax.shape), dims=dims, coords=coords)
 
-# # Vectorize the function
-# vfunc = np.vectorize(calculate_comfort_index_summer)
+vfunc = np.vectorize(calculate_comfort_index_summer)
 
-# # Get the values of the variables
-# tasmax_values = ds_tasmax.tasmax.values
-# tas_values = ds_tas.tas.values
-# rel_hum_values = ds_relhum.hurs.values
-# sfc_wind_values = ds_wind.sfcWind.values
+tasmax_values = ds_tasmax.tasmax.values
+tas_values = ds_tas.tas.values
+rel_hum_values = ds_relhum.hurs.values
+sfc_wind_values = ds_wind.sfcWind.values
 
-# # Create an iterator to loop through all the values
-# it = np.nditer([tasmax_values, tas_values, rel_hum_values, sfc_wind_values],
-#                 flags=['multi_index'])
+# Create an iterator to loop through all the values
+it = np.nditer([tasmax_values, tas_values, rel_hum_values, sfc_wind_values],
+                flags=['multi_index'])
 
-# while not it.finished:
-#     tasmax_val = it[0]
-#     tas_val = it[1]
-#     rel_hum_val = it[2]
-#     sfc_wind_val = it[3]
+while not it.finished:
+    tasmax_val = it[0]
+    tas_val = it[1]
+    rel_hum_val = it[2]
+    sfc_wind_val = it[3]
     
-#     comfort_index_val = vfunc(tasmax_val, tas_val, rel_hum_val, sfc_wind_val)
-#     print(comfort_index_val)
-#     # Assign the computed value to a new variable or modify the original variable
-#     # For example:
-#     ds_comfort_index.comfort_index[it.multi_index] = comfort_index_val
+    comfort_index_val = vfunc(tasmax_val, tas_val, rel_hum_val, sfc_wind_val)
+    print(comfort_index_val)
+    # Assign the computed value to a new variable or modify the original variable
+    # For example:
+    ds_comfort_index.comfort_index[it.multi_index] = comfort_index_val
     
-#     # Move to the next value
-#     it.iternext()
+    # Move to the next value
+    it.iternext()
     
 # ds_comfort_index.to_netcdf('/home/kon/Documents/Sweden/Master/Climate Modeling/Project/data/GFDL-CM4/to_use/indexes.nc')
 
@@ -108,23 +106,23 @@ I need to keep the coordinates so I can plot afterwards as well.
 # -----------------------------------------------------------
 
 
-dims = ds_tas.tas.dims
-coords = {dim: ds_tas[dim] for dim in dims}
-attrs = ds_tasmax.attrs
+# dims = ds_tas.tas.dims
+# coords = {dim: ds_tas[dim] for dim in dims}
+# attrs = ds_tasmax.attrs
 
-# Create the new empty Dataset
-ds_heat_index = xr.Dataset(coords=coords, attrs=attrs)
+# # Create the new empty Dataset
+# ds_heat_index = xr.Dataset(coords=coords, attrs=attrs)
 
-# Add a new variable for the comfort index with the same dimensions and coordinates
-ds_heat_index['heat_index'] = xr.DataArray(np.zeros(ds_tas.tas.shape), dims=dims, coords=coords)
+# # Add a new variable for the comfort index with the same dimensions and coordinates
+# ds_heat_index['heat_index'] = xr.DataArray(np.zeros(ds_tas.tas.shape), dims=dims, coords=coords)
 
-heat_index_vals = mpcalc.heat_index(ds_tas.tas.values * units.degC, ds_relhum.hurs.values * units.percent,mask_undefined=False)
+# heat_index_vals = mpcalc.heat_index(ds_tas.tas.values * units.degC, ds_relhum.hurs.values * units.percent,mask_undefined=False)
 
 
 # heat_index = xr.Variable(['time','latitude', 'longitude'], 
-                      # heat_index_vals, attrs= {'time':ds_tas.tas.time,'latitude':ds_tas.tas.lat,'longitude':ds_tas.tas.lon})
+#                        heat_index_vals, attrs= {'time':ds_tas.tas.time,'latitude':ds_tas.tas.lat,'longitude':ds_tas.tas.lon})
 
-ds_heat_index = ds_heat_index.assign({'heat_index': heat_index_vals})
+# ds_heat_index = ds_heat_index.assign({'heat_index': heat_index_vals})
 
 
 # new_var= xr.Variable(['latitude', 'longitude'], 

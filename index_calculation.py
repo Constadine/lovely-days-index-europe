@@ -73,7 +73,7 @@ def calculate_comfort_index_summer(tasmax, tas, rel_hum, sfc_wind):
     RH_grade = grader.grade_relative_humidity(rel_hum)
     WS_grade = grader.grade_wind_speed(sfc_wind)
     comfort_index = 2*((4 * DAT_grade) + (MAT_grade) + (2*MT_grade) + (2*RH_grade) + WS_grade)
-    
+        
     return comfort_index
 
     
