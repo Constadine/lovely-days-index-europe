@@ -1,3 +1,8 @@
+"""
+Everything was wrong. Move on.
+"""
+
+
 import numpy as np
 import xarray as xr
 import pandas as pd
@@ -63,40 +68,40 @@ I need to keep the coordinates so I can plot afterwards as well.
 
 # ------------------------------------- Dad approach
 
-dims = ds_tasmax.tasmax.dims
-coords = {dim: ds_tasmax[dim] for dim in dims}
-attrs = ds_tasmax.attrs
+# dims = ds_tasmax.tasmax.dims
+# coords = {dim: ds_tasmax[dim] for dim in dims}
+# attrs = ds_tasmax.attrs
 
-ds_comfort_index = xr.Dataset(coords=coords, attrs=attrs)
+# ds_comfort_index = xr.Dataset(coords=coords, attrs=attrs)
 
-# Add a new variable for the comfort index with the same dimensions and coordinates
-ds_comfort_index['comfort_index'] = xr.DataArray(np.zeros(ds_tasmax.tasmax.shape), dims=dims, coords=coords)
+# # Add a new variable for the comfort index with the same dimensions and coordinates
+# ds_comfort_index['comfort_index'] = xr.DataArray(np.zeros(ds_tasmax.tasmax.shape), dims=dims, coords=coords)
 
-vfunc = np.vectorize(calculate_comfort_index_summer)
+# vfunc = np.vectorize(calculate_comfort_index_summer)
 
-tasmax_values = ds_tasmax.tasmax.values
-tas_values = ds_tas.tas.values
-rel_hum_values = ds_relhum.hurs.values
-sfc_wind_values = ds_wind.sfcWind.values
+# tasmax_values = ds_tasmax.tasmax.values
+# tas_values = ds_tas.tas.values
+# rel_hum_values = ds_relhum.hurs.values
+# sfc_wind_values = ds_wind.sfcWind.values
 
-# Create an iterator to loop through all the values
-it = np.nditer([tasmax_values, tas_values, rel_hum_values, sfc_wind_values],
-                flags=['multi_index'])
+# # Create an iterator to loop through all the values
+# it = np.nditer([tasmax_values, tas_values, rel_hum_values, sfc_wind_values],
+#                 flags=['multi_index'])
 
-while not it.finished:
-    tasmax_val = it[0]
-    tas_val = it[1]
-    rel_hum_val = it[2]
-    sfc_wind_val = it[3]
+# while not it.finished:
+#     tasmax_val = it[0]
+#     tas_val = it[1]
+#     rel_hum_val = it[2]
+#     sfc_wind_val = it[3]
     
-    comfort_index_val = vfunc(tasmax_val, tas_val, rel_hum_val, sfc_wind_val)
-    print(comfort_index_val)
-    # Assign the computed value to a new variable or modify the original variable
-    # For example:
-    ds_comfort_index.comfort_index[it.multi_index] = comfort_index_val
+#     comfort_index_val = vfunc(tasmax_val, tas_val, rel_hum_val, sfc_wind_val)
+#     print(comfort_index_val)
+#     # Assign the computed value to a new variable or modify the original variable
+#     # For example:
+#     ds_comfort_index.comfort_index[it.multi_index] = comfort_index_val
     
-    # Move to the next value
-    it.iternext()
+#     # Move to the next value
+#     it.iternext()
     
 # ds_comfort_index.to_netcdf('/home/kon/Documents/Sweden/Master/Climate Modeling/Project/data/GFDL-CM4/to_use/indexes.nc')
 
