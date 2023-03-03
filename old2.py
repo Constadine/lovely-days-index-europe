@@ -20,7 +20,8 @@ ds_tas = xr.open_dataset(f_temp)
 dims = ds_tasmax.tasmax.dims
 coords = {dim: ds_tasmax[dim] for dim in dims}
 attrs = ds_tasmax.attrs
-var_attrs = {'time':ds_tasmax.tasmax.time,'latitude':ds_tasmax.tasmax.lat,'longitude':ds_tasmax.tasmax.lon}
+var_attrs = {'time': ds_tasmax.tasmax.time, 'latitude': ds_tasmax.tasmax.lat, 'longitude': ds_tasmax.tasmax.lon}
+
 var_coords = ['time','lat', 'lon']
 ds_indexes = xr.Dataset(coords=coords, attrs=attrs)
 
@@ -58,12 +59,13 @@ vars_to_assign = {'maxtemp_comfort':maxtemp_comfort,
                   'hum_comfort':hum_comfort,
                   'total_comfort':total_comfort}
 
-ds_indexes = ds_tasmax.assign(vars_to_assign)
+ds_indexes = ds_indexes.assign(vars_to_assign)
 # Summer comfort calculations END----------------------------------------------------------------------------------------
 
 # change_to_datetime(ds_indexes)
 
 # plot_europe(ds_indexes, "total_comfort", 'total_comfort', '2010-08-01', 12)
 
-ds_indexes.to_netcdf('../data/GFDL-CM4/to_use/comfort_index.nc')
+
+ds_indexes.to_netcdf('../data/GFDL-CM4/to_use/test.nc')
 
