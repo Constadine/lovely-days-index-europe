@@ -20,7 +20,7 @@ ds_tas = xr.open_dataset(f_temp)
 dims = ds_tasmax.tasmax.dims
 coords = {dim: ds_tasmax[dim] for dim in dims}
 attrs = ds_tasmax.attrs
-var_attrs = {'time':ds_tasmax.time,'latitude':ds_tasmax.tasmax.lat,'longitude':ds_tasmax.tasmax.lon}
+var_attrs = {'time':ds_tasmax.tasmax.time,'latitude':ds_tasmax.tasmax.lat,'longitude':ds_tasmax.tasmax.lon}
 var_coords = ['time','lat', 'lon']
 ds_indexes = xr.Dataset(coords=coords, attrs=attrs)
 
@@ -65,5 +65,5 @@ ds_indexes = ds_tasmax.assign(vars_to_assign)
 
 # plot_europe(ds_indexes, "total_comfort", 'total_comfort', '2010-08-01', 12)
 
-ds_indexes.to_netcdf('/home/kon/Documents/Sweden/Master/Climate Modeling/Project/data/GFDL-CM4/to_use/comfort_index.nc')
+ds_indexes.to_netcdf('../data/GFDL-CM4/to_use/comfort_index.nc')
 
