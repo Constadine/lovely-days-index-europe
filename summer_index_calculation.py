@@ -4,11 +4,12 @@ import numpy as np
 from plot_europe import plot_europe
 from tools import change_to_datetime
 
-folder = '../data/miroc6/to_use/winter'
-f_tasmax = folder+'/tasmax_MIROC6_1980-2010_europe_winter_celc.nc'
-f_tas = folder+'/tas_MIROC6_1980-2010_europe_winter_celc.nc'
-f_hum = folder+'/humidity_MIROC6_1980-2010_europe_winter.nc'
-f_sfcWind = folder+'/sfcWind_MIROC6_1980-2010_europe_winter.nc'
+folder = '../data/MIROC6/to_use/long/winter/monmeans'
+
+f_tasmax = folder+'/tasmax_MIROC6_2040-2100_europe_winter_celc_monmean.nc'
+f_tas = folder+'/tas_MIROC6_2040-2100_europe_winter_celc_monmean.nc'
+f_hum = folder+'/humidity_MIROC6_2040-2100_europe_winter_monmean.nc'
+f_sfcWind = folder+'/sfcWind_MIROC6_2040-2100_europe_winter_monmean.nc'
 
 
 # Load Datasets
@@ -36,8 +37,6 @@ Workaround was to work immediately on top of the pre-existing dataset.
 
 
 # Summer comfort calculations START----------------------------------------------------------------------------------------
-maxtemp_conf = np.where(ds_tasmax.tasmax < 31, 3, -2)
-temp_comfort = np.where(ds_tas.tas < 27, 2, 0)
 
 ds1 = ds_tasmax.assign(maxtemp_comfort=xr.where(ds_tasmax.tasmax < 31, 3, -2))
 
@@ -71,9 +70,10 @@ ds8 = ds8.drop(['tasmax',
 # ds_indexes = ds_indexes.assign(vars_to_assign)
 # Summer comfort calculations END----------------------------------------------------------------------------------------
 
+
 # change_to_datetime(ds8)
 
 # plot_europe(ds8, "total_comfort", 'total_comfort', '2000-08-01', 12)
 
-ds8.to_netcdf('../data//miroc6/output/comfort_index_2020-2050_winter.nc')
+ds8.to_netcdf('../data/MIROC6/output/from_monthly_data_v2/moncomfort_indices_2040-2100_winter.nc')
 

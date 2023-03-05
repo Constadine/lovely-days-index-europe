@@ -3,7 +3,7 @@ import cartopy.feature as cfeature
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot_europe(ds, variable:str, label:str, date:str, time_step:int):
+def plot_comfort_index(ds, variable:str, label:str, date:str, time_step:int):
 
     if label=="Temperature":
         unit = '°C'
@@ -36,12 +36,23 @@ def plot_europe(ds, variable:str, label:str, date:str, time_step:int):
     ax.set_extent([-25, 40, 34, 73], crs=ccrs.PlateCarree())
     
     # Plot the temperature data
-    im = ax.pcolormesh(ds_sel.lon, ds_sel.lat, eval("ds_sel."+f"{variable}"), cmap='RdYlBu_r', transform=ccrs.PlateCarree())
+    im = ax.pcolormesh(ds_sel.lon, ds_sel.lat, eval("ds_sel."+f"{variable}"), cmap='RdYlGn', transform=ccrs.PlateCarree())
+    """
+    Use this to plot changes:
+        
+    norm = mpb.colors.TwoSlopeNorm(0)
+    # Plot the temperature data
+    im = ax.pcolormesh(ds_sel.lon, ds_sel.lat,
+                       eval("ds_sel."+f"{variable}"),
+                       cmap='RdYlGn',shading='auto',
+                       norm=norm,
+                       # norm=mpb.colors.PowerNorm(gamma=1),
+                       transform=ccrs.PlateCarree())
     
+    """
     # Add a colorbar
     cbar = plt.colorbar(im, ax=ax, orientation='horizontal', shrink=0.8)
     cbar.set_label(f'{label} {unit}')
-    
     # Add a title
     plt.title(f'{label} in Europe on {ds_sel.time.values.astype("datetime64[D]")}')
     
