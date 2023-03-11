@@ -11,13 +11,16 @@ MODELS = ['GFDL-CM4', 'MIROC6']
 PERIODS = ['1950-2010', '2040-2100']
 PERIODNAMES = ['historical', 'future']
 INTERVALS = ['daily', 'monthly']
-MODEL, PERIOD, PERIODNAME, INTERVAL = MODELS[0], PERIODS[1], PERIODNAMES[1], INTERVALS[0]
-folder = f'../data/{MODEL}/to_use/long/summer/'
+AREAS = ['north', 'south']
+MODEL, PERIOD, PERIODNAME, INTERVAL, AREA = MODELS[1], PERIODS[0], PERIODNAMES[0], INTERVALS[0], AREAS[1]
 
-f_hum = folder+f'/humidity_{MODEL}_{PERIOD}_europe_summer{P1}.nc'
-f_sfcWind = folder+f'/sfcWind_{MODEL}_{PERIOD}_europe_summer{P1}.nc'
-f_tasmax = folder+f'/tasmax_{MODEL}_{PERIOD}_europe_summer_celc{P1}.nc'
-f_tas = folder+f'/tas_{MODEL}_{PERIOD}_europe_summer_celc{P1}.nc'
+
+folder = f'../data/{MODEL}/to_use/long/summer/{AREA}/'
+
+f_hum = folder+f'/humidity_{MODEL}_{PERIOD}_europe_summer_{AREA}{P1}.nc'
+f_sfcWind = folder+f'/sfcWind_{MODEL}_{PERIOD}_europe_summer_{AREA}{P1}.nc'
+f_tasmax = folder+f'/tasmax_{MODEL}_{PERIOD}_europe_summer_celc_{AREA}{P1}.nc'
+f_tas = folder+f'/tas_{MODEL}_{PERIOD}_europe_summer_celc_{AREA}{P1}.nc'
 
 # Load Datasets
 
@@ -97,5 +100,5 @@ ds['total_comfort'] = total_comfort
 
 # plot_comfort_index(ds, "total_comfort", 'total_comfort', '2010-08-10', 12)
 
-ds.to_netcdf(f'../data/{MODEL}/output/from_{INTERVAL}_data_v2/{INTERVAL}_CI_{MODEL}_{PERIODNAME}_summer.nc')
+ds.to_netcdf(f'../data/{MODEL}/output/from_{INTERVAL}_data_v2/{AREA}/{INTERVAL}_CI_{MODEL}_{PERIODNAME}_summer{AREA}.nc')
 
